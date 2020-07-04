@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { Provider } from 'react-redux';
+import { appIOFactory } from './App.io';
+import { store } from './store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App io={appIOFactory(store.dispatch)} />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

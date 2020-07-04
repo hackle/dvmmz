@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import './App.scss';
+import { Country, AppState, AppIO } from './App.io';
+import { connect } from 'react-redux';
 
-function App() {
+type AppProps = {
+  io: AppIO,
+  countries: Country[]
+}
+
+function App({ countries, io }: AppProps) {
+  useEffect(() => { io.getCountries(); }, [io]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        {
+          (countries ?? []).map((c: Country) => {
+            return <div key={c.id}>{ c.name }</div>;
+          })
+        }
     </div>
   );
 }
 
-export default App;
+export default connect((st: AppState) => ({
+    countries: (st ?? []).countries
+  })
+)(App);
