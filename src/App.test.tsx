@@ -11,7 +11,7 @@ test('renders learn react link', () => {
   const store = createStore(reduce, applyMiddleware(thunk));
   
   const testIO: typeof appIOFactory = dispatch => ({
-    getCountries: new Promise(res => dispatch({ type: 'countries', payload: [ { id: 1, name: 'Chile' }]}))
+    getImages: new Promise(res => dispatch({ type: 'countries', payload: [ { id: 1, name: 'Chile' }]}))
   });
 
   const { getByText } = render(

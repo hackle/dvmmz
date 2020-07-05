@@ -10,7 +10,7 @@ import { store } from './store';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App io={appIOFactory(store.dispatch)} />
+      <App io={appIOFactory(store.dispatch as any)} />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -1,28 +1,31 @@
 import React, { useEffect } from 'react';
 import './App.scss';
-import { Country, AppState, AppIO } from './App.io';
+import { AppIO } from './App.io';
 import { connect } from 'react-redux';
+import { Image } from './cully.types';
+import { AppState } from './store';
 
 type AppProps = {
   io: AppIO,
-  countries: Country[]
+  image?: Image
 }
 
-function App({ countries, io }: AppProps) {
-  useEffect(() => { io.getCountries(); }, [io]);
+function App({ image, io }: AppProps) {
+  useEffect(() => { io.getImages(); }, [io]);
 
   return (
     <div className="App">
-        {
-          (countries ?? []).map((c: Country) => {
-            return <div key={c.id}>{ c.name }</div>;
-          })
-        }
+      {image
+        ? <div className="image-container">
+            <img src={image.url} alt={image.filename}/>
+          </div>
+        : <div>Loading...</div> 
+      }
     </div>
   );
 }
 
 export default connect((st: AppState) => ({
-    countries: (st ?? []).countries
+    image: (st || {}).currentImage
   })
 )(App);
