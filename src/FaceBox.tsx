@@ -1,5 +1,6 @@
 import React, { CSSProperties, useState, RefObject, useLayoutEffect } from "react";
 import { Face } from "./app.state";
+import './FaceBox.scss';
 
 type Viewport = { x: number, y: number, width: number, height: number };
 const emptyViewport: Viewport = { x: 0, y: 0, width: 0, height: 0};
@@ -23,16 +24,13 @@ export function FaceBox({ face, container }: FaceProps) {
       }, [ container ]);
 
     const styles: CSSProperties = {
-        position: 'absolute',
-        display: 'block',
-        border: '1px solid green',
         left: viewport.width * face.xmin,
         top: viewport.height * face.ymin,
         height: viewport.height * (face.ymax - face.ymin),
         width: viewport.width * (face.xmax - face.xmin),
     };
 
-    return <div style={styles}>
+    return <div className="face-box" style={styles}>
     </div>
 }
 

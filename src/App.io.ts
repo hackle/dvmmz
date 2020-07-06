@@ -13,7 +13,8 @@ export const appIOFactory = (dispatch: Dispatch<IAppAction<any>>) => ({
         const { data: str } = await Axios.get(`https://cully-api.herokuapp.com/images/${imageId}/faces`);
         const { data: faces } = JSON.parse(str);
         dispatch(makeAction.UpdateFaces({ imageId, faces }));
-    }
+    },
+    deleteFace: async (faceId: string, imageId: string) => dispatch(makeAction.DeleteFace({ faceId, imageId }))
 });
 
 export type AppIO = ReturnType<typeof appIOFactory>;

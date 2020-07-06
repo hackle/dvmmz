@@ -29,7 +29,8 @@ test('renders face box', () => {
   
   const testIO: AppIO = {
     getImages: async () => { store.dispatch(makeAction.UpdateImages(images)); },
-    getFaces: async () => { store.dispatch(makeAction.UpdateFaces(faces)) }
+    getFaces: async () => { store.dispatch(makeAction.UpdateFaces(faces)) },
+    deleteFace: async (faceId, imageId) => { store.dispatch(makeAction.DeleteFace({ faceId, imageId }))}
   };
 
   const { container }: { container: HTMLElement } = render(
@@ -37,6 +38,6 @@ test('renders face box', () => {
       <App io={testIO} />
     </Provider>
   );
-  const facebox = container.querySelectorAll('FaceBox');
-  expect(facebox).not.toBeNull();
+  const faceboxes = container.querySelectorAll('.face-box');
+  expect(faceboxes.length).toBe(1);
 });

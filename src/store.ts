@@ -6,9 +6,12 @@ import { setSequentially } from 'tsminilens';
 import { Image, Face, AppState, appStateTo, initialState } from './app.state'
 
 export type UpdateFacesPayload = { imageId: string, faces: Face[] };
+export type DeleteFacePayload = { imageId: string, faceId: string };
+
 const actions = {
     UpdateImages: (payload: Image[]) => payload,
-    UpdateFaces: (payload: UpdateFacesPayload) => payload
+    UpdateFaces: (payload: UpdateFacesPayload) => payload,
+    DeleteFace: (payload: DeleteFacePayload) => payload,
 };
 
 type Parameter<T> = T extends (p: infer P) => any ? P : never;
@@ -37,9 +40,13 @@ function updateFaces(st: AppState, { imageId, faces }: UpdateFacesPayload) {
     return appStateTo.faces.over(st, fs => fs[imageId] ? fs : { ...fs, [imageId]: faces });
 }
 
+const deleteFace = (st: AppState, { faceId, imageId }: DeleteFacePayload) =>
+    appStateTo.faces.then.to(imageId).over(st, fs => fs.filter(f => f.id !== faceId));
+
 export const reduce = new ReducerRegistry<AppState>()
     .register('UpdateImages', updateImages)
     .register('UpdateFaces', updateFaces)
+    .register('DeleteFace', deleteFace)
     .toReducer();
 
 export const store = createStore(reduce as any, initialState, composeWithDevTools(applyMiddleware(thunk)));
