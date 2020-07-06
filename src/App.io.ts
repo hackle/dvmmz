@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { Dispatch } from "react";
-import { IAppAction } from "./reducers-lens";
+import { IAppAction } from "./reducer-registry";
 import { makeAction } from "./store";
 
 export const appIOFactory = (dispatch: Dispatch<IAppAction<any>>) => ({

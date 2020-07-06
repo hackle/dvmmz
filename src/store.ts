@@ -1,14 +1,14 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { ReducerRegistry } from "./reducers-lens";
+import { ReducerRegistry } from "./reducer-registry";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { setSequentially } from 'tsminilens';
 import { Image, Face, AppState, appStateTo, initialState } from './app.state'
 
-type UpdateFaceAction = { imageId: string, faces: Face[] };
+export type UpdateFacesPayload = { imageId: string, faces: Face[] };
 const actions = {
     UpdateImages: (payload: Image[]) => payload,
-    UpdateFaces: (payload: UpdateFaceAction) => payload
+    UpdateFaces: (payload: UpdateFacesPayload) => payload
 };
 
 type Parameter<T> = T extends (p: infer P) => any ? P : never;
@@ -33,11 +33,11 @@ const updateImages = (st: AppState, images: Image[]) =>
         .thenWith(appStateTo.currentImageId, images[0]?.id)
         .apply(st);
 
-function updateFaces(st: AppState, { imageId, faces }: UpdateFaceAction) {
+function updateFaces(st: AppState, { imageId, faces }: UpdateFacesPayload) {
     return appStateTo.faces.over(st, fs => fs[imageId] ? fs : { ...fs, [imageId]: faces });
 }
 
-const reduce = new ReducerRegistry<AppState>()
+export const reduce = new ReducerRegistry<AppState>()
     .register('UpdateImages', updateImages)
     .register('UpdateFaces', updateFaces)
     .toReducer();
