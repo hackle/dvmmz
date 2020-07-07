@@ -3,7 +3,7 @@ import thunk from "redux-thunk";
 import { ReducerRegistry } from "./Store.reducer-registry";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { setSequentially } from 'tsminilens';
-import { Image, AppState, appStateTo, initialState } from './App.state'
+import { Image, AppState, appStateTo, initialState } from './AppState'
 import { UpdateFacesPayload, DeleteFacePayload } from "./Store.actions";
 
 const updateImages = (st: AppState, images: Image[]) => 

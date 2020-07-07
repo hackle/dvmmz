@@ -11,7 +11,7 @@ import logo from './logo.png';
 import cully from './cully.png';
 import AppError from './App.error';
 import { Loader } from './Loader';
-import { Face, Image, AppState, currentImage } from './App.state';
+import { Face, Image, AppState, currentImage } from './AppState';
 
 type AppProps = {
   io: AppIO,

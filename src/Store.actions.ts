@@ -1,4 +1,4 @@
-import { Face, Image } from "./App.state";
+import { Face, Image } from "./AppState";
 
 type Parameter<T> = T extends (p: infer P) => any ? P : never;
 
