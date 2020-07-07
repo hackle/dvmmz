@@ -2,25 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 import './App.scss';
 import { AppIO } from './App.io';
 import { connect } from 'react-redux';
-import { Image, AppState, currentImage, Face } from './app.state';
 import FaceBox from './FaceBox';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Backdrop, CircularProgress } from '@material-ui/core';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import logo from './logo.png';
 import cully from './cully.png';
+import AppError from './App.error';
+import { Loader } from './Loader';
+import { Face, Image, AppState, currentImage } from './App.state';
 
 type AppProps = {
   io: AppIO,
   image?: Image,
-  faces: Face[]
+  faces: Face[],
+  error: string | undefined
 }
 
 type MenuState = { x?: number, y?: number, faceId?: string };
 
-function App({ image, faces, io }: AppProps) {
+function App({ image, faces, io, error }: AppProps) {
   useEffect(() => { io.getImages(); }, [io]);
   useEffect(() => { image && io.getFaces(image.id); }, [image, io]);
   const [ menu, setMenu ] = useState<MenuState>({});
@@ -86,6 +88,8 @@ function App({ image, faces, io }: AppProps) {
           <MenuItem 
             onClick={() => deleteFace(menu.faceId)}>Delete</MenuItem>
         </Menu>
+
+        <AppError error={error} />
     </div>
   );
 }
@@ -94,18 +98,9 @@ const mapStateToProps = (st: AppState) => {
   const image = currentImage(st);
   return {
     image,
-    faces: st.faces[image?.id ?? ''] ?? []
+    faces: st.faces[image?.id ?? ''] ?? [],
+    error: st.error
   };
-}
-
-function Loader() {
-  const [open, setOpen] = React.useState(true);
-
-  return (
-    <Backdrop open={open} onClick={() => setOpen(false)}>
-      <CircularProgress />
-    </Backdrop>
-  );
 }
 
 export default connect(mapStateToProps)(App);

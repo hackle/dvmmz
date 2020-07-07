@@ -1,4 +1,4 @@
-import { Face, Image } from "./app.state";
+import { Face, Image } from "./App.state";
 
 type Parameter<T> = T extends (p: infer P) => any ? P : never;
 
@@ -10,7 +10,8 @@ const actions = {
     UpdateImages: (images: Image[]) => images,
     UpdateFaces: (payload: UpdateFacesPayload) => payload,
     DeleteFace: (payload: DeleteFacePayload) => payload,
-    UpdateImageIndex: (offset: number) => offset
+    UpdateImageIndex: (offset: number) => offset,
+    AppError: (error: string) => error,
 };
 
 // below typing removes the need of passing and matching against in action types

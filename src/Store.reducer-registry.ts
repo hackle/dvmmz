@@ -1,5 +1,5 @@
 import { Reducer } from "react";
-import { ActionType, PayloadType } from "./store-actions";
+import { ActionType, PayloadType } from "./Store.actions";
 
 export type IAppAction<TPayload> = { type: string, payload?: TPayload }
 

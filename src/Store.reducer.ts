@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { ReducerRegistry } from "./store-reducer-registry";
+import { ReducerRegistry } from "./Store.reducer-registry";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { setSequentially } from 'tsminilens';
-import { Image, AppState, appStateTo, initialState } from './app.state'
-import { UpdateFacesPayload, DeleteFacePayload } from "./store-actions";
+import { Image, AppState, appStateTo, initialState } from './App.state'
+import { UpdateFacesPayload, DeleteFacePayload } from "./Store.actions";
 
 const updateImages = (st: AppState, images: Image[]) => 
     setSequentially(appStateTo.images, images)
@@ -38,6 +38,7 @@ export const reduce = new ReducerRegistry<AppState>()
     .register('UpdateFaces', updateFaces)
     .register('DeleteFace', deleteFace)
     .register('UpdateImageIndex', updateImageIndex)
+    .register('AppError', (s, p) => appStateTo.error.set(s, p))
     .toReducer();
 
 export const store = createStore(reduce as any, initialState, composeWithDevTools(applyMiddleware(thunk)));

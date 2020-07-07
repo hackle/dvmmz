@@ -5,11 +5,11 @@ import { AppIO, appIOFactory } from './App.io';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { makeAction, UpdateFacesPayload } from './store-actions';
-import { initialState } from './app.state';
-import { Image } from './app.state';
+import { makeAction, UpdateFacesPayload } from './Store.actions';
+import { initialState } from './App.state';
+import { Image } from './App.state';
 import _ from 'lodash';
-import { reduce } from './store-reducer';
+import { reduce } from './Store.reducer';
 
 const images: Image[] = [
   { 

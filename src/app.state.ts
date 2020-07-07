@@ -17,7 +17,8 @@ export type Image = {
 export type AppState = {
     images: Image[],
     currentImageId: string,
-    faces: Record<string, Face[]>
+    faces: Record<string, Face[]>,
+    error: string | undefined
 }
 
 type AppStateLenses = { [K in keyof AppState]: Lens<AppState, AppState[K]> };
@@ -25,13 +26,15 @@ const lensMaker = lensFrom<AppState>();
 export const appStateTo: AppStateLenses = {
     images: lensMaker.to('images'),
     currentImageId: lensMaker.to('currentImageId'),
-    faces: lensMaker.to('faces')
+    faces: lensMaker.to('faces'),
+    error: lensMaker.to('error')
 }
 
 export const initialState: AppState = {
     images: [],
     currentImageId: '',
-    faces: {}
+    faces: {},
+    error: undefined
 };
 
 export const currentImage = (st: AppState) => appStateTo.images?.view(st)?.find(img => img.id === st.currentImageId);

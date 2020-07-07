@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState, RefObject, useLayoutEffect } from "react";
-import { Face } from "./app.state";
+import { Face } from "./App.state";
 import './FaceBox.scss';
 
 type Viewport = { x: number, y: number, width: number, height: number };
