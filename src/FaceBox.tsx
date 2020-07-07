@@ -30,8 +30,7 @@ export function FaceBox({ face, container }: FaceProps) {
         width: viewport.width * (face.xmax - face.xmin),
     };
 
-    return <div className="face-box" style={styles}>
-    </div>
+    return <div className="face-box" style={styles}></div>
 }
 
 export default FaceBox;

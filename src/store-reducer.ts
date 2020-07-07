@@ -1,36 +1,10 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { ReducerRegistry } from "./reducer-registry";
+import { ReducerRegistry } from "./store-reducer-registry";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { setSequentially } from 'tsminilens';
-import { Image, Face, AppState, appStateTo, initialState } from './app.state'
-
-export type UpdateFacesPayload = { imageId: string, faces: Face[] };
-export type DeleteFacePayload = { imageId: string, faceId: string };
-
-const actions = {
-    UpdateImages: (payload: Image[]) => payload,
-    UpdateFaces: (payload: UpdateFacesPayload) => payload,
-    DeleteFace: (payload: DeleteFacePayload) => payload,
-    UpdateImageIndex: (offset: number) => offset
-};
-
-type Parameter<T> = T extends (p: infer P) => any ? P : never;
-
-export type ActionType = keyof typeof actions;
-export type PayloadType<Ta extends ActionType> = Parameter<typeof actions[Ta]>;
-
-type ActionsWithType = { 
-    [P in keyof typeof actions]: (ps: Parameter<typeof actions[P]>) => { payload: Parameter<typeof actions[P]>, type: P }
-};
-
-export const makeAction: ActionsWithType = Object.keys(actions).reduce(
-    (aggr, cur) => ({ 
-        ...aggr, 
-        [cur]: (payload: any) => ({ payload, type: cur }) 
-    }),
-    {}
-) as any;
+import { Image, AppState, appStateTo, initialState } from './app.state'
+import { UpdateFacesPayload, DeleteFacePayload } from "./store-actions";
 
 const updateImages = (st: AppState, images: Image[]) => 
     setSequentially(appStateTo.images, images)
@@ -38,7 +12,7 @@ const updateImages = (st: AppState, images: Image[]) =>
         .apply(st);
 
 function updateFaces(st: AppState, { imageId, faces }: UpdateFacesPayload) {
-    return appStateTo.faces.over(st, fs => fs[imageId] ? fs : { ...fs, [imageId]: faces });
+    return appStateTo.faces.then.to(imageId).set(st, faces);
 }
 
 const deleteFace = (st: AppState, { faceId, imageId }: DeleteFacePayload) =>

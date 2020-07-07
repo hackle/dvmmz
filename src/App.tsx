@@ -51,7 +51,7 @@ function App({ image, faces, io }: AppProps) {
               <img alt="logo" src={logo} />
             </div>
             <div className="image-container" ref={containerRef}>
-              <img src={image.url} alt={image.filename}/>
+              <img src={image.url} alt={image.filename} data-testid="current-image" />
               {
                 faces.map(face => 
                   <div
@@ -66,9 +66,9 @@ function App({ image, faces, io }: AppProps) {
               }
             </div>
             <div className="operations">
-              <ArrowBack onClick={io.prevImage} />
+              <ArrowBack onClick={io.prevImage} data-testid="btn-backward" />
               <span>{ image.filename }</span>
-              <ArrowForward onClick={io.nextImage} />
+              <ArrowForward onClick={io.nextImage} data-testid="btn-forward" />
             </div>
           </div>
       }
