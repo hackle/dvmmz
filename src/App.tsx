@@ -6,6 +6,11 @@ import { Image, AppState, currentImage, Face } from './app.state';
 import FaceBox from './FaceBox';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Backdrop, CircularProgress } from '@material-ui/core';
+import ArrowForward from '@material-ui/icons/ArrowForward';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import logo from './logo.png';
+import cully from './cully.png';
 
 type AppProps = {
   io: AppIO,
@@ -37,23 +42,35 @@ function App({ image, faces, io }: AppProps) {
 
   return (
     <div className="App">
-      {image
-        ? <div className="image-container" ref={containerRef}>
-            <img src={image.url} alt={image.filename}/>
-            {
-              faces.map(face => 
-                (<div
-                  key={face.id}
-                  data-testid="face-box"
-                  onContextMenu={e => showMenu(e, face.id)}>
-                  <FaceBox 
-                    face={face} 
-                    container={containerRef} />
-                </div>)
-              )
-            }
+      {
+        !image
+        ? <Loader /> 
+        : <div className="wrapper">
+            <div className="header">
+              <img alt="cully" src={cully} />
+              <img alt="logo" src={logo} />
+            </div>
+            <div className="image-container" ref={containerRef}>
+              <img src={image.url} alt={image.filename}/>
+              {
+                faces.map(face => 
+                  <div
+                    key={face.id}
+                    data-testid="face-box"
+                    onContextMenu={e => showMenu(e, face.id)}>
+                    <FaceBox 
+                      face={face} 
+                      container={containerRef} />
+                  </div>
+                )
+              }
+            </div>
+            <div className="operations">
+              <ArrowBack onClick={io.prevImage} />
+              <span>{ image.filename }</span>
+              <ArrowForward onClick={io.nextImage} />
+            </div>
           </div>
-        : <div>Loading...</div> 
       }
 
       <Menu
@@ -79,6 +96,16 @@ const mapStateToProps = (st: AppState) => {
     image,
     faces: st.faces[image?.id ?? ''] ?? []
   };
+}
+
+function Loader() {
+  const [open, setOpen] = React.useState(true);
+
+  return (
+    <Backdrop open={open} onClick={() => setOpen(false)}>
+      <CircularProgress />
+    </Backdrop>
+  );
 }
 
 export default connect(mapStateToProps)(App);

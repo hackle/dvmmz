@@ -14,7 +14,9 @@ export const appIOFactory = (dispatch: Dispatch<IAppAction<any>>) => ({
         const { data: faces } = JSON.parse(str);
         dispatch(makeAction.UpdateFaces({ imageId, faces }));
     },
-    deleteFace: async (faceId: string, imageId: string) => dispatch(makeAction.DeleteFace({ faceId, imageId }))
+    deleteFace: (faceId: string, imageId: string) => dispatch(makeAction.DeleteFace({ faceId, imageId })),
+    nextImage: () => dispatch(makeAction.UpdateImageIndex(1)),
+    prevImage: () => dispatch(makeAction.UpdateImageIndex(-1)),
 });
 
 export type AppIO = ReturnType<typeof appIOFactory>;
