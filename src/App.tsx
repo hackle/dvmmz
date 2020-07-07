@@ -13,25 +13,25 @@ type AppProps = {
   faces: Face[]
 }
 
-type MenuState = { x?: number, y?: number, face?: Face };
+type MenuState = { x?: number, y?: number, faceId?: string };
 
 function App({ image, faces, io }: AppProps) {
   useEffect(() => { io.getImages(); }, [io]);
-  useEffect(() => { image && io.getFaces(image.id)}, [image, io]);
+  useEffect(() => { image && io.getFaces(image.id); }, [image, io]);
   const [ menu, setMenu ] = useState<MenuState>({});
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const showMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, face: Face) => {
+  const showMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, faceId?: string) => {
     event.preventDefault();
     setMenu({
       x: event.clientX,
       y: event.clientY,
-      face
+      faceId
     });
   };
 
-  const deleteFace = (face?: Face) => {
-    io.deleteFace(face?.id ?? '', image?.id ?? '');
+  const deleteFace = (faceId?: string) => {
+    io.deleteFace(faceId ?? '', image?.id ?? '');
     setMenu({});
   };
 
@@ -44,7 +44,8 @@ function App({ image, faces, io }: AppProps) {
               faces.map(face => 
                 (<div
                   key={face.id}
-                  onContextMenu={e => showMenu(e, face)}>
+                  data-testid="face-box"
+                  onContextMenu={e => showMenu(e, face.id)}>
                   <FaceBox 
                     face={face} 
                     container={containerRef} />
@@ -57,7 +58,7 @@ function App({ image, faces, io }: AppProps) {
 
       <Menu
           keepMounted
-          open={menu.y != null}
+          open={menu.faceId != null}
           onClose={() => setMenu({})}
           anchorReference="anchorPosition"
           anchorPosition={
@@ -65,7 +66,8 @@ function App({ image, faces, io }: AppProps) {
               ? { top: menu.y, left: menu.x }
               : undefined
           }>
-          <MenuItem onClick={() => deleteFace(menu.face)}>Delete</MenuItem>
+          <MenuItem 
+            onClick={() => deleteFace(menu.faceId)}>Delete</MenuItem>
         </Menu>
     </div>
   );
